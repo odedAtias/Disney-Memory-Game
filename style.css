@@ -1,0 +1,93 @@
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #2c3842;
+
+}
+
+header {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    color: #5d2831;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    min-height: 500px;
+    min-width: 500px;
+    padding: 20px;
+    background-color: #ede3d0;
+    border-radius: 20px;
+
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    color: #5d2831;
+}
+
+#button {
+    background: #e05b40;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+#gameBoard {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: 10px;
+}
+
+.card {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.front, .back {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.front {
+    background-color: white;
+}
+
+.back {
+    background-color: white;
+    transform: rotateY(180deg);
+}
