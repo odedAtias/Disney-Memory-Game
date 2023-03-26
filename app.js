@@ -1,10 +1,10 @@
 // App global variables
-
 let data = [];
 let flippedCards = [];
 let matchedCards = [];
 let couples = [];
-let time = 0;
+let time1 = 0;
+let counter = 0;
 
 // DOM accessings
 const startButton = document.querySelector('button');
@@ -72,6 +72,7 @@ function checkMove(card) {
 
 // 6) Function to check if there is a match move
 function checkMatch(first, second) {
+	counter++;
 	// disable card clicks while checking for match
 	document.querySelectorAll('.card').forEach(card => {
 		card.style.pointerEvents = 'none';
@@ -86,40 +87,49 @@ function checkMatch(first, second) {
 		// add the matched pair to the matched cards array
 		matchedCards.push(first, second);
 		// Alert
-		alertMatch(card1);
+		setTimeout(() => alertMatch(card1), 200);
+		// Set
+		document.querySelectorAll('.card').forEach(card => {
+			card.style.pointerEvents = 'auto';
+		});
 		// remove from them the listeners of checkMove
 		first.removeEventListener('click', checkMove);
 		second.removeEventListener('click', checkMove);
 
 		// Check if the user end the game
 		if (matchedCards.length === 20) {
-			alert('כל הכבוד, הצלחתם !');
+			setTimeout(async () => {
+				alert(
+					'Congratulations, you have completed the game !\ntotal attempts : ' +
+						counter
+				);
+			}, 500);
 		}
 	} else {
 		// flip cards back over
 		setTimeout(() => {
-			alert('טעיתם! לא נורא, נסו שוב!');
+			alert('Mistake, try again.');
 			first.classList.remove('flipped');
 			second.classList.remove('flipped');
 			// enable card clicks after flipping back over
 			document.querySelectorAll('.card').forEach(card => {
 				card.style.pointerEvents = 'auto';
 			});
-		}, 500);
+		}, 300);
 	}
-	// Fault case
+	// default case
 	flippedCards = [];
 }
 
 // 7) Function to Alert to the user after match
 function alertMatch(characterName) {
 	const c = couples.find(c => c.name === characterName);
-	res = 'הצלחתם כל הכבוד!' + '\n';
-	res += 'Character name : \n' + characterName + '\n';
-	res += 'Films: \n' + displayProp(c.films) + '\n';
-	res += 'Tv Shows: \n' + displayProp(c.tvShows) + '\n';
-	res += 'Video Games: \n' + displayProp(c.videoGame) + '\n';
-	res += 'Attractions: \n' + displayProp(c.parkAttractions) + '\n';
+	res = 'Excellent !' + '\n';
+	res += 'Character name : ' + characterName + '\n';
+	res += 'Films: ' + displayProp(c.films) + '\n';
+	res += 'Tv Shows: ' + displayProp(c.tvShows) + '\n';
+	res += 'Video Games: ' + displayProp(c.videoGames) + '\n';
+	res += 'Attractions: ' + displayProp(c.parkAttractions) + '\n';
 	alert(res);
 }
 
@@ -137,17 +147,28 @@ function displayProp(prop) {
 	}
 }
 
+// 9) Function to get the current time
+async function getTime() {
+	try {
+		const response = await fetch('./get_current_time.php');
+		if (!response.ok) throw new Error('Network response was not ok.');
+		const data = await response.text();
+		return data;
+	} catch (error) {
+		console.error('There was a problem with the fetch operation:', error);
+	}
+}
+
 // App Main Functions
 
 // 1) Function to initialize the game cores
 async function init() {
 	data = await fetchData('https://api.disneyapi.dev/characters');
-	console.log(data);
 	startButton.addEventListener('click', () => {
 		// Alerting to the user start play
-		alert('בהצלחה !');
-		// set the time when the game started
-		// time = await getTime();
+		alert('Good luck !');
+		counter = 0;
+		// Render HTML
 		couples = generate10ShuffeledCouples(data);
 		renderCards(couples);
 		// add event listeners to each card
