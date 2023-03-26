@@ -58,7 +58,7 @@ function renderCards(couples) {
 // 5) Function to check the move of the user
 function checkMove(card) {
 	// If we try to select card that selected before and matched
-	if (matchedCards.includes(card)) {
+	if (matchedCards.includes(card) || flippedCards.includes(card)) {
 		alert('Invalid move !');
 		return;
 	}
@@ -144,18 +144,6 @@ function displayProp(prop) {
 		for (let i = 0; i < length - 1; i++) res += `${prop[i]}, `;
 		res += `${prop[length - 1]}]`;
 		return res;
-	}
-}
-
-// 9) Function to get the current time
-async function getTime() {
-	try {
-		const response = await fetch('./get_current_time.php');
-		if (!response.ok) throw new Error('Network response was not ok.');
-		const data = await response.text();
-		return data;
-	} catch (error) {
-		console.error('There was a problem with the fetch operation:', error);
 	}
 }
 
